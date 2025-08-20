@@ -15,4 +15,8 @@ public class ContactService {
     public List<Contact> getContacts() {
         return repo.findAll();
     }
+
+    public Contact getContact(Long id) {
+        return repo.findById(id).orElse(new Contact());
+    }
 }
