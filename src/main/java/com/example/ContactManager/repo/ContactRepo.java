@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ContactRepo extends JpaRepository<Contact, Long> {
+
     List<Contact> findByNameContainingOrPhoneNumberContaining(String name, String phoneNumber);
 }

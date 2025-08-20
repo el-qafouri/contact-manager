@@ -23,4 +23,10 @@ public class ContactService {
     public List<Contact> searchByKeyword(String keyword) {
         return repo.findByNameContainingOrPhoneNumberContaining(keyword, keyword);
     }
+
+    public Contact addContact(Contact contact) {
+        return repo.save(contact);
+    }
+
+
 }
