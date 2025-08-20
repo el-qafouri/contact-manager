@@ -24,6 +24,9 @@ public class ContactController {
         return service.getContact(id);
     }
 
-
+    @GetMapping("/contacts/keyword/{keyword}")
+    public List<Contact> searchByKeyword(@PathVariable("keyword") String keyword) {
+        return service.searchByKeyword(keyword);
+    }
 
 }

@@ -19,4 +19,8 @@ public class ContactService {
     public Contact getContact(Long id) {
         return repo.findById(id).orElse(new Contact());
     }
+
+    public List<Contact> searchByKeyword(String keyword) {
+        return repo.findByNameContainingOrPhoneNumberContaining(keyword, keyword);
+    }
 }
