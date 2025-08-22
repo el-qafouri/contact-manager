@@ -48,4 +48,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("occurred error");
         }
     }
+
+    @PutMapping("/contacts/{id}")
+    public Contact updateContact(@RequestBody Contact contact, @PathVariable Long id) {
+       return service.updateContact(id, contact);
+    }
 }

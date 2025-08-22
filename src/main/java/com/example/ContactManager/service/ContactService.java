@@ -29,15 +29,6 @@ public class ContactService {
     }
 
 
-//    public boolean deleteContact(Long id) {
-//        if (repo.existsById(id)) {
-//            repo.deleteById(id);
-//            return true;
-//        }
-//        return false;
-//    }
-
-
     public boolean deleteContact(Long id) {
         if (repo.findById(id).isEmpty()) {
             return false;
@@ -46,4 +37,13 @@ public class ContactService {
             return true;
         }
     }
+
+    public Contact updateContact(Long id, Contact newContact) {
+        Contact oldContact = repo.findById(id).orElseThrow();
+        oldContact.setName(newContact.getName());
+        oldContact.setEmail(newContact.getEmail());
+        oldContact.setPhoneNumber(newContact.getPhoneNumber());
+        return repo.save(oldContact);
+    }
+
 }
