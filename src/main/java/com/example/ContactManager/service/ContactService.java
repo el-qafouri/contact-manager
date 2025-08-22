@@ -29,4 +29,21 @@ public class ContactService {
     }
 
 
+//    public boolean deleteContact(Long id) {
+//        if (repo.existsById(id)) {
+//            repo.deleteById(id);
+//            return true;
+//        }
+//        return false;
+//    }
+
+
+    public boolean deleteContact(Long id) {
+        if (repo.findById(id).isEmpty()) {
+            return false;
+        } else {
+            repo.deleteById(id);
+            return true;
+        }
+    }
 }
