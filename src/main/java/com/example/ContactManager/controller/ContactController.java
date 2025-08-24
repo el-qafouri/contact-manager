@@ -21,7 +21,7 @@ public class ContactController {
     }
 
     @GetMapping("/contacts/{id}")
-    public Contact getContact(@PathVariable("id") Long id) {
+    public ContactDtoResponse getContact(@PathVariable("id") Long id) {
         return service.getContact(id);
     }
 

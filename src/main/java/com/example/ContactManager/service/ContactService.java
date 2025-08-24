@@ -9,6 +9,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -23,8 +24,9 @@ public class ContactService {
         return contacts.stream().map(m -> mapper.toDto(m)).toList();
     }
 
-    public Contact getContact(Long id) {
-        return repo.findById(id).orElse(new Contact());
+    public ContactDtoResponse getContact(Long id) {
+        Optional<Contact> contact = repo.findById(id);
+        return contact.map(m->mapper.toDto(m)).orElse(null);
     }
 
     public List<Contact> searchByKeyword(String keyword) {
