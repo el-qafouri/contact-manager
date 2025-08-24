@@ -1,6 +1,5 @@
 package com.example.ContactManager.repo;
 
-import com.example.ContactManager.dto.ContactDtoResponse;
 import com.example.ContactManager.model.Contact;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

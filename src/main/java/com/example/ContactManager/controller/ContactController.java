@@ -2,6 +2,7 @@ package com.example.ContactManager.controller;
 
 import com.example.ContactManager.dto.ContactDtoRequest;
 import com.example.ContactManager.dto.ContactDtoResponse;
+import com.example.ContactManager.dto.ContactDtoUpdate;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,9 @@ public class ContactController {
     }
 
     @PutMapping("/contacts/{id}")
-    public Contact updateContact(@RequestBody Contact contact, @PathVariable Long id) {
-       return service.updateContact(id, contact);
+    public String updateContact(@PathVariable Long id, @RequestBody ContactDtoUpdate request) {
+        request.setId(id);
+        service.updateContact(request);
+       return "updated successfully...";
     }
 }

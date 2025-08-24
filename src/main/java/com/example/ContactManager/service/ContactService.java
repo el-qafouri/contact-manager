@@ -2,6 +2,7 @@ package com.example.ContactManager.service;
 
 import com.example.ContactManager.dto.ContactDtoRequest;
 import com.example.ContactManager.dto.ContactDtoResponse;
+import com.example.ContactManager.dto.ContactDtoUpdate;
 import com.example.ContactManager.mapper.ContactMapper;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.repo.ContactRepo;
@@ -27,7 +28,7 @@ public class ContactService {
 
     public ContactDtoResponse getContact(Long id) {
         Optional<Contact> contact = repo.findById(id);
-        return contact.map(m->mapper.toDto(m)).orElse(null);
+        return contact.map(m -> mapper.toDto(m)).orElse(null);
     }
 
     public List<ContactDtoResponse> searchByKeyword(String keyword) {
@@ -50,12 +51,15 @@ public class ContactService {
         }
     }
 
-    public Contact updateContact(Long id, Contact newContact) {
-        Contact oldContact = repo.findById(id).orElseThrow();
-        oldContact.setName(newContact.getName());
-        oldContact.setEmail(newContact.getEmail());
-        oldContact.setPhoneNumber(newContact.getPhoneNumber());
-        return repo.save(oldContact);
+    public Contact updateContact(ContactDtoUpdate request) {
+        Optional<Contact> oldContact = repo.findById(request.getId());
+        if (oldContact.isPresent()) {
+            Contact existContact = oldContact.get();
+            existContact.setName(request.getName());
+            existContact.setEmail(request.getEmail());
+            existContact.setPhoneNumber(request.getPhoneNumber());
+            return repo.save(existContact);
+        }
+        return null;
     }
-
 }
