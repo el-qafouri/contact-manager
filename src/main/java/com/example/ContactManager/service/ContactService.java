@@ -1,8 +1,11 @@
 package com.example.ContactManager.service;
 
+import com.example.ContactManager.dto.ContactDtoResponse;
+import com.example.ContactManager.mapper.ContactMapper;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.repo.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +15,12 @@ public class ContactService {
     @Autowired
     private ContactRepo repo;
 
-    public List<Contact> getContacts() {
-        return repo.findAll();
+    @Autowired
+    private ContactMapper mapper;
+
+    public List<ContactDtoResponse> getContacts() {
+        List<Contact> contacts = repo.findAll();
+        return contacts.stream().map(m -> mapper.toDto(m)).toList();
     }
 
     public Contact getContact(Long id) {

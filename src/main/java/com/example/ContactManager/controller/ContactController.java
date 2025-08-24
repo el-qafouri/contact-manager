@@ -1,5 +1,6 @@
 package com.example.ContactManager.controller;
 
+import com.example.ContactManager.dto.ContactDtoResponse;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class ContactController {
     private ContactService service;
 
     @GetMapping("/contacts")
-    public List<Contact> getContacts() {
+    public List<ContactDtoResponse> getContacts() {
         return service.getContacts();
     }
 
