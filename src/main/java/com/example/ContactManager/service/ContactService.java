@@ -1,5 +1,6 @@
 package com.example.ContactManager.service;
 
+import com.example.ContactManager.dto.ContactDtoRequest;
 import com.example.ContactManager.dto.ContactDtoResponse;
 import com.example.ContactManager.mapper.ContactMapper;
 import com.example.ContactManager.model.Contact;
@@ -29,12 +30,14 @@ public class ContactService {
         return contact.map(m->mapper.toDto(m)).orElse(null);
     }
 
-    public List<Contact> searchByKeyword(String keyword) {
-        return repo.findByNameContainingOrPhoneNumberContaining(keyword, keyword);
+    public List<ContactDtoResponse> searchByKeyword(String keyword) {
+        List<Contact> contacts = repo.findByNameContainingOrPhoneNumberContaining(keyword, keyword);
+        return contacts.stream().map(m -> mapper.toDto(m)).toList();
     }
 
-    public Contact addContact(Contact contact) {
-        return repo.save(contact);
+    public Long addContact(ContactDtoRequest request) {
+        Contact contact = mapper.toEntity(request);
+        return repo.save(contact).getId();
     }
 
 

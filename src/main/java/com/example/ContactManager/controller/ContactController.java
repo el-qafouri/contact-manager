@@ -1,5 +1,6 @@
 package com.example.ContactManager.controller;
 
+import com.example.ContactManager.dto.ContactDtoRequest;
 import com.example.ContactManager.dto.ContactDtoResponse;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.service.ContactService;
@@ -26,13 +27,14 @@ public class ContactController {
     }
 
     @GetMapping("/contacts/keyword/{keyword}")
-    public List<Contact> searchByKeyword(@PathVariable("keyword") String keyword) {
+    public List<ContactDtoResponse> searchByKeyword(@PathVariable("keyword") String keyword) {
         return service.searchByKeyword(keyword);
     }
 
     @PostMapping("/contacts")
-    public Contact addContact(@RequestBody Contact contact) {
-        return service.addContact(contact);
+    public String addContact(@RequestBody ContactDtoRequest contact) {
+        Long savedId = service.addContact(contact);
+        return "saved with id:   " +   savedId;
     }
 
 
