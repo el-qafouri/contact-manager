@@ -7,10 +7,10 @@ import com.example.ContactManager.mapper.ContactMapper;
 import com.example.ContactManager.model.Contact;
 import com.example.ContactManager.repo.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -23,43 +23,46 @@ public class ContactService {
 
     public List<ContactDtoResponse> getContacts() {
         List<Contact> contacts = repo.findAll();
-        return contacts.stream().map(m -> mapper.toDto(m)).toList();
+        return contacts
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     public ContactDtoResponse getContact(Long id) {
         Optional<Contact> contact = repo.findById(id);
-        return contact.map(m -> mapper.toDto(m)).orElse(null);
+        return contact.map(mapper::toDto)
+                .orElseThrow(() -> new NoSuchElementException("not found this contact: " + id));
     }
 
     public List<ContactDtoResponse> searchByKeyword(String keyword) {
         List<Contact> contacts = repo.findByNameContainingOrPhoneNumberContaining(keyword, keyword);
-        return contacts.stream().map(m -> mapper.toDto(m)).toList();
+        return contacts
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
-    public Long addContact(ContactDtoRequest request) {
+    public ContactDtoResponse addContact(ContactDtoRequest request) {
         Contact contact = mapper.toEntity(request);
-        return repo.save(contact).getId();
+        Contact savedContact = repo.save(contact);
+        return mapper.toDto(savedContact);
     }
 
-
-    public boolean deleteContact(Long id) {
-        if (repo.findById(id).isEmpty()) {
-            return false;
-        } else {
-            repo.deleteById(id);
-            return true;
-        }
+    public void deleteContact(Long id) {
+        Contact contact = repo.findById(id).orElseThrow(()
+                -> new RuntimeException("not found this: " + id));
+        repo.delete(contact);
     }
 
     public Contact updateContact(ContactDtoUpdate request) {
-        Optional<Contact> oldContact = repo.findById(request.getId());
-        if (oldContact.isPresent()) {
-            Contact existContact = oldContact.get();
-            existContact.setName(request.getName());
-            existContact.setEmail(request.getEmail());
-            existContact.setPhoneNumber(request.getPhoneNumber());
-            return repo.save(existContact);
-        }
-        return null;
+        Contact existContact = repo
+                .findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Contact not found contact with id: " + request.getId()));
+        existContact.setName(request.getName());
+        existContact.setEmail(request.getEmail());
+        existContact.setPhoneNumber(request.getPhoneNumber());
+        return repo.save(existContact);
     }
+
 }
